@@ -2,7 +2,7 @@ import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react'
 import Navbar from './Navbar.jsx';
-
+import ElencoParcheggi from './ElencoParcheggi.jsx';
 
 function App() {
 
@@ -27,7 +27,7 @@ function App() {
     <>
       <Navbar />
       <div className="join join-horizontal gap-5">
-        <div className = "join join-item" style={{ margin: '0 auto', marginTop: '20px', marginBottom: '20px', width: '1200px', height: '90vh' }}>
+        <div className="join join-item" style={{ margin: '0 auto', marginTop: '20px', marginBottom: '20px', width: '1200px', height: '90vh' }}>
           <MapContainer center={position} zoom={zoom} style={{ height: '100%', width: '100%', zIndex: 0 }}>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -36,19 +36,8 @@ function App() {
             <ClickLogger />
           </MapContainer>
         </div>
-        <div className="join join-item gap-4">
-          <h1>
-            P
-          </h1> 
-          <h2>
-            Parcheggio
-          </h2>
-          <div>
-            {
-                  
-            }
-          </div>
-        </div>
+        <ElencoParcheggi className="join join-item" />
+
       </div>
 
     </>
