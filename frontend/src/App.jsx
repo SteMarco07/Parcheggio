@@ -27,7 +27,7 @@ function App() {
     <div className = "">
       <Navbar />
       <div className="join join-horizontal gap-5 mx-10 mt-10 px-auto">
-        <div className="join join-item" style={{ width: '1100px', height: '82vh' }}>
+        <div className="join join-item w-1100 h-82vh rounded-box" style={{ width: '1100px', height: '82vh', overflow: 'hidden' }}>
           <MapContainer center={position} zoom={zoom} style={{ height: '100%', width: '100%', zIndex: 0 }}>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
