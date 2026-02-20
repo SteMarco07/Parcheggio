@@ -27,7 +27,7 @@ function ElencoParcheggi() {
         </div>
         <div className = "join-item">
             {el.map((item) => (
-                <div key={item.id} className="card w-96 bg-base-100 shadow-xl">
+                <div key={item.id} className="card card-border w-96 bg-base-90 shadow-xl mb-4">
                     <div className="card-body">
                         <h2 className="card-title">{item.name}</h2>
                         <p>{item.description}</p>

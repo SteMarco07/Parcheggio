@@ -24,10 +24,10 @@ function App() {
 
 
   return (
-    <>
+    <div className = "">
       <Navbar />
-      <div className="join join-horizontal gap-5">
-        <div className="join join-item" style={{ margin: '0 auto', marginTop: '20px', marginBottom: '20px', width: '1200px', height: '90vh' }}>
+      <div className="join join-horizontal gap-5 mx-10 mt-10 px-auto">
+        <div className="join join-item" style={{ width: '1100px', height: '82vh' }}>
           <MapContainer center={position} zoom={zoom} style={{ height: '100%', width: '100%', zIndex: 0 }}>
             <TileLayer
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -40,7 +40,7 @@ function App() {
 
       </div>
 
-    </>
+    </div>
   );
 }
 
