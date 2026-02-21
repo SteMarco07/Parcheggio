@@ -19,7 +19,7 @@ class ParcheggiController{
         $this->container = $container;
     }
 
-    public function parcheggioById(Request $request, Response $response, array $args): Response
+    public function getParcheggioById(Request $request, Response $response, array $args): Response
     {
         $parcheggiRepository = new ParcheggiRepository($this->container->get('config'));
         $parcheggio = $parcheggiRepository->getParcheggioById($args['id']);
@@ -28,6 +28,11 @@ class ParcheggiController{
         } else {
             $response->getBody()->write([]);
         }
+        return $response->withHeader('application/json');
+    }
+
+    public function getAllParcheggi(Request $request, Response $response, array $args) : Response {
+        $parcheggiRepository = new ParcheggiRepository($this->container->get('config'));
         return $response->withHeader('application/json');
     }
 }   
