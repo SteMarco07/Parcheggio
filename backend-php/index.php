@@ -5,11 +5,10 @@ use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
 require '../vendor/autoload.php';
-require 'Controller/TennistaController.php';
+require 'Controller/ParcheggiController.php';
 
 use League\Plates\Engine;
-use Util\Connection;
-use Controller\TennistaController;
+use Controller\ParcheggiController;
 use DI\Container as Container;
 
 //Istruzione super importante per il deployment
@@ -33,21 +32,13 @@ $app->get('/', function (Request $request, Response $response, $args): Response 
 });
 
 // Restituisce tutti i parcheggi presenti
-$app->get('/park', );
+$app->get('/park', ParcheggiController::class . ':getAllParcheggi');
 
 // Restituisce un parcheggio specifico
 $app->get('/park/{park_id}',  ParcheggiController::class . ':getParcheggioById');
 
-// Modifica una nuova prenotazione
-$app->post('/reservation', function (Request $request, Response $response, $args): Response {
-
-    // Prende l'ID dal body
-    $park_id = $request->getParsedBody()['park_id'];
-
-    // Logica di modifica
-
-    return $response;
-});
+// Modifica una prenotazione esistente, l'ID e le date di inizio e fine sono nel body
+$app->post('/reservation', ParcheggiController::class . ':userEditReservation' );
 
 // L'amministratore deve poter modificare un parcheggio
 $app->put('/park', function (Request $request, Response $response, $args): Response {

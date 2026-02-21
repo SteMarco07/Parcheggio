@@ -43,4 +43,18 @@ class ParcheggiController{
         return $response
             ->withHeader('Content-Type', 'application/json');
     }
+
+    public function userEditReservation(Request $request, Response $response, array $args) : Response {
+        $prenotazione = $this->parcheggiRepository->editUserReservation(
+            $request->getParsedBody()['park_id'],
+            $request->getParsedBody()['data_inizio'],
+            $request->getParsedBody()['data_fine']
+        );
+        $response->getBody()->write(json_encode($prenotazione));
+        $response->withStatus(200);
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+
+
 }   
