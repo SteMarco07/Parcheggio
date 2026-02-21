@@ -1,7 +1,7 @@
-import ElencoParcheggi from './components/ElencoParcheggi.jsx';
-import Mappa from './components/Mappa.jsx';
+import ElencoParcheggi from '../components/ElencoParcheggi.jsx';
+import Mappa from '../components/Mappa.jsx';
 
-function MappaParcheggi() {
+function PaginaParcheggi() {
 
     return (
         <>
@@ -28,4 +28,4 @@ function MappaParcheggi() {
 
 }
 
-export default MappaParcheggi;
+export default PaginaParcheggi;
