@@ -1,0 +1,60 @@
+import { create } from 'zustand';
+import { api } from './api';
+
+
+export const useStore = create((set, get) => ({
+    // STATO INIZIALE
+    resources: [],
+    isLoading: false,
+    error: null,
+    position: [45.55584514965588, 10.216172766008182],
+    zoom: 18,
+
+    // Modifica posizione e salva su localStorage
+    modifyPosition: (newPosition) => {
+        if (Array.isArray(newPosition) && newPosition.length == 2) {
+            localStorage.setItem('lastPosition', JSON.stringify({ lat: newPosition[0], lng: newPosition[1] }));
+        }
+
+        set({ position: newPosition });
+    },
+
+    // Modifica zoom e salva su localStorage
+    modifyZoom: (newZoom) => {
+
+        localStorage.setItem('lastZoom', JSON.stringify(newZoom));
+
+        set({ zoom: newZoom });
+    },
+
+    // Carica posizione/zoom da localStorage
+    loadFromLocalStorage: () => {
+
+        const storedClickRaw = localStorage.getItem('lastPosition');
+        const storedZoomRaw = localStorage.getItem('lastZoom');
+
+        const storedClick = storedClickRaw ? JSON.parse(storedClickRaw) : null;
+        const storedZoom = storedZoomRaw ? JSON.parse(storedZoomRaw) : null;
+
+        if (storedClick && storedClick.lat != null && storedClick.lng != null) {
+            set({ position: [storedClick.lat, storedClick.lng] });
+        }
+
+        if (storedZoom != null) {
+            set({ zoom: storedZoom });
+        }
+
+    },
+
+    // 1. Fetch dei dati (Asincrona)
+    fetchResources: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const data = await api.fetchResources();
+            set({ resources: data, isLoading: false });
+        } catch (err) {
+            set({ error: err.message, isLoading: false });
+        }
+    },
+
+}));

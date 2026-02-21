@@ -1,4 +1,4 @@
-import Menu from "./Menu.jsx";
+import Menu from "./components/Menu.jsx";
 
 function Navbar() {
     return (

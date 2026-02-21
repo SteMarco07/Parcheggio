@@ -1,4 +1,4 @@
-import pIcon from './assets/p_parcheggio.svg';
+import pIcon from '../assets/p_parcheggio.svg';
 
 const PARKINGS = [
   {
