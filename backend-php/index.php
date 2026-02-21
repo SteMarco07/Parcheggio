@@ -27,8 +27,7 @@ $app->setBasePath($config['BASEPATH']);
 
 $app->get('/', function (Request $request, Response $response, $args): Response {
 
-    $pagina = $templates->render('routes', []);
-    $response->getBody()->write($pagina);
+    $response->getBody()->write("rotta default");
 
     return $response;
 });
@@ -41,7 +40,6 @@ $app->get('/park/{park_id}',  ParcheggiController::class . ':getParcheggioById')
 
 // Modifica una nuova prenotazione
 $app->post('/reservation', function (Request $request, Response $response, $args): Response {
-    global $pdo;
 
     // Prende l'ID dal body
     $park_id = $request->getParsedBody()['park_id'];
@@ -53,7 +51,6 @@ $app->post('/reservation', function (Request $request, Response $response, $args
 
 // L'amministratore deve poter modificare un parcheggio
 $app->put('/park', function (Request $request, Response $response, $args): Response {
-    global $pdo;
 
     $park_id = $request->getParsedBody()['park_id'];
 
