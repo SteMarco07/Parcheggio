@@ -2,7 +2,7 @@ import 'leaflet/dist/leaflet.css';
 import { useEffect } from 'react'
 
 import { useStore } from './store.jsx'
-import Navbar from './Navbar.jsx';
+import Navbar from './components/Navbar.jsx';
 import MappaParcheggi from './MappaParcheggi.jsx';
 
 function App() {
@@ -27,3 +27,4 @@ function App() {
 }
 
 export default App;
+
