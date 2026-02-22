@@ -10,6 +10,14 @@ export const useStore = create((set, get) => ({
     position: [45.55584514965588, 10.216172766008182],
     zoom: 18,
     authMode: "login",
+    utente: {
+        nome: "",
+        cognome: "",
+        email: "",
+        taga: [],
+        password: ""
+    },
+
 
     // Modifica posizione e salva su localStorage
     modifyPosition: (newPosition) => {
