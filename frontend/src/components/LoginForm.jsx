@@ -1,10 +1,20 @@
+
+import { useStore } from "../store.jsx";
+
 function LoginForm() {
 
-return (
-    <>
-    <h1>Sezione del login</h1>
-    </>
-)
+    const { setAuthMode } = useStore();
+
+    return (
+        <>
+            <h1>Sezione del login</h1>
+            <div className="flex flex-horizontal gap-2">
+                <p>Non hai un account?</p>
+                <a href="#" role="button" className="link link-primary" onClick={(e) => { e.preventDefault(); setAuthMode(1); }}>Registrati</a>
+
+            </div>
+        </>
+    );
 
 }
 
