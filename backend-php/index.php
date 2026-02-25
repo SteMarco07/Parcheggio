@@ -4,7 +4,7 @@ use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Slim\Factory\AppFactory;
 
-require '../vendor/autoload.php';
+require './vendor/autoload.php';
 require 'Controller/ParcheggiController.php';
 
 use League\Plates\Engine;
@@ -35,7 +35,10 @@ $app->get('/', function (Request $request, Response $response, $args): Response 
 $app->get('/park', ParcheggiController::class . ':getAllParcheggi');
 
 // Restituisce un parcheggio specifico
-$app->get('/park/{park_id}',  ParcheggiController::class . ':getParcheggioById');
+$app->get('/park/{park_id}',  ParcheggiController::class . ':getParcheggioById' );
+
+// Crea una nuova prenotazione, l'ID del parcheggio e le date di inizio e fine sono nel body
+$app->put('/reservation', ParcheggiController::class . ':userCreateReservation' );
 
 // Modifica una prenotazione esistente, l'ID e le date di inizio e fine sono nel body
 $app->post('/reservation', ParcheggiController::class . ':userEditReservation' );
@@ -50,28 +53,17 @@ $app->put('/park', function (Request $request, Response $response, $args): Respo
     return $response->withStatus(204);
 });
 
-// Crea una nuova presentazione (sia utente che admin)
-$app->put('/reservation', function (Request $request, Response $response, $args): Response {
-    global $templates, $pdo;
 
-    $reservation_id = $request->getParsedBody()['reservation_id'];
+// // L'amministratore deve poter creare un parcheggio
+// $app->put('/park', function (Request $request, Response $response, $args): Response {
+//     global $pdo;
 
-    $pagina = $templates->render('park', []);
-    $response->getBody()->write($pagina);
+//     $park_id = $request->getParsedBody()['park_id'];
 
-    return $response->withStatus(201);
-});
+//     //Logica di creazione
 
-// L'amministratore deve poter creare un parcheggio
-$app->put('/park', function (Request $request, Response $response, $args): Response {
-    global $pdo;
-
-    $park_id = $request->getParsedBody()['park_id'];
-
-    //Logica di creazione
-
-    return $response->withStatus(201);
-});
+//     return $response->withStatus(201);
+// });
 
 // Elimina una prenotazione, dal lato utente (id nel body)
 $app->delete('/reservation', ParcheggiController::class . ':deleteReservation');

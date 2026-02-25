@@ -27,6 +27,23 @@ class ParcheggiRepository{
         return $stmt->fetch();
     }
 
+    public function userCreateReservation(string $first_name, string $last_name, string $license_plate, string $start_time, string $end_time, string $id_parking_lot) : array
+    {
+        //Logica di creazione
+        $stmt = $this->pdo->prepare('INSERT INTO prenotazioni (first_name, last_name, license_plate, start_time, end_time, status, id_parking_lot) 
+                                            VALUES (:first_name, :last_name, :license_plate, :start_time, :end_time, :status, :id_parking_lot)');
+        $stmt->execute([
+            'first_name' => $first_name,
+            'last_name' => $last_name,
+            'license_plate' => $license_plate,
+            'start_time' => $start_time,
+            'end_time' => $end_time,
+            'status' => 'ACTIVE',
+            'id_parking_lot' => $id_parking_lot
+        ]);
+        return $this->getParcheggioById($id_parking_lot);
+    }
+
     public function editUserReservation(string $id, Date $data_inizio, Date $data_fine) : array
     {
         //Logica di modifica
@@ -45,7 +62,7 @@ class ParcheggiRepository{
     {
         //Logica di modifica
         $stmt = $this->pdo->prepare('DELETE * FROM prenotazioni
-                                     WHERE id = :id');
+                                    WHERE id = :id');
         $stmt->execute([
             'id' => $id
         ]);

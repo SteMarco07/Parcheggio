@@ -44,6 +44,21 @@ class ParcheggiController{
             ->withHeader('Content-Type', 'application/json');
     }
 
+    public function userCreateReservation(Request $request, Response $response, array $args) : Response {
+        $prenotazione = $this->parcheggiRepository->userCreateReservation(
+            $request->getParsedBody()['first_name'],
+            $request->getParsedBody()['last_name'],
+            $request->getParsedBody()['license_plate'],
+            $request->getParsedBody()['start_time'],
+            $request->getParsedBody()['end_time'],
+            $request->getParsedBody()['id_parking_lot']
+        );
+        $response->getBody()->write(json_encode($prenotazione));
+        $response->withStatus(201);
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+
     public function userEditReservation(Request $request, Response $response, array $args) : Response {
         $prenotazione = $this->parcheggiRepository->editUserReservation(
             $request->getParsedBody()['park_id'],
@@ -66,4 +81,6 @@ class ParcheggiController{
         return $response
                 ->withHeader('Content-Type', 'application/json');
     }
-}   
+
+
+}
