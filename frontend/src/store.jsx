@@ -4,7 +4,8 @@ import { api } from './api';
 
 export const useStore = create((set, get) => ({
     // STATO INIZIALE
-    resources: [],
+    parcheggi: [],
+    prenotazioni: [],
     isLoading: false,
     error: null,
     position: [45.55584514965588, 10.216172766008182],
@@ -34,6 +35,8 @@ export const useStore = create((set, get) => ({
         localStorage.setItem('lastZoom', JSON.stringify(newZoom));
 
         set({ zoom: newZoom });
+        console.log('Zoom:', newZoom);
+        console.log('Posizione:', get().position);
     },
 
     // Carica posizione/zoom da localStorage
@@ -69,11 +72,21 @@ export const useStore = create((set, get) => ({
     },
 
     // 1. Fetch dei dati (Asincrona)
-    fetchResources: async () => {
+    fetchParcheggi: async () => {
         set({ isLoading: true, error: null });
         try {
-            const data = await api.fetchResources();
-            set({ resources: data, isLoading: false });
+            const data = await api.fetchParcheggi();
+            set({ parcheggi: data, isLoading: false });
+        } catch (err) {
+            set({ error: err.message, isLoading: false });
+        }
+    },
+
+    fetchPrenotazioni: async () => {
+        set({ isLoading: true, error: null });
+        try {
+            const data = await api.fetchPrenotazioni();
+            set({ prenotazioni: data, isLoading: false });
         } catch (err) {
             set({ error: err.message, isLoading: false });
         }

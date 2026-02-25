@@ -11,11 +11,13 @@ import PaginaPrenotazioni from './pages/PaginaPrenotazioni.jsx';
 import PaginaAutenticazione from './pages/PaginaAutenticazione.jsx';
 
 function App() {
-  const { loadFromLocalStorage } = useStore();
+  const { loadFromLocalStorage, fetchParcheggi, fetchPrenotazioni } = useStore();
 
   useEffect(() => {
     loadFromLocalStorage();
-  }, [loadFromLocalStorage]);
+    fetchParcheggi();
+    fetchPrenotazioni();
+  }, [loadFromLocalStorage, fetchParcheggi, fetchPrenotazioni]);
 
   return (
     <BrowserRouter>

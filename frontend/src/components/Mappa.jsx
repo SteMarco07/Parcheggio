@@ -15,14 +15,15 @@ function MapSync() {
   return null
 }
 
-function ClickLogger() {
+function CenterLogger() {
   const { modifyPosition, modifyZoom } = useStore()
 
   useMapEvents({
-    click(e) {
-      const { lat, lng } = e.latlng
+    // quando l'utente termina il pan/zoom della mappa, prendo il centro e salvo
+    moveend(e) {
+      const center = e.target.getCenter()
       const z = e.target.getZoom()
-      modifyPosition([lat, lng])
+      modifyPosition([center.lat, center.lng])
       modifyZoom(z)
     }
   })
@@ -37,7 +38,7 @@ function Mappa() {
     <MapContainer center={position} zoom={zoom} style={{ height: '100%', width: '100%', zIndex: 0 }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap' />
       <MapSync />
-      <ClickLogger />
+      <CenterLogger />
     </MapContainer>
   )
 }
