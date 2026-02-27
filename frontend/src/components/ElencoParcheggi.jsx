@@ -16,8 +16,8 @@ function ElencoParcheggi() {
         {parcheggi.map((item) => (
           <div key={item.id} className="card card-border w-full bg-base-90 shadow-xl mb-4">
             <div className="card-body">
-              <h2 className="card-title">{item.name}</h2>
-              <p>{item.description}</p>
+              <h2 className="card-title">{item.nome}</h2>
+              <p>{item.descrizione}</p>
             </div>
           </div>
         ))}

@@ -20,18 +20,24 @@ export const api = {
         return [
             {
                 id: 1,
-                name: 'Parcheggio 1',
-                description: 'Parcheggio situato in centro città, vicino a negozi e ristoranti. Offre 50 posti auto e tariffe convenienti.',
+                nome: 'Parcheggio 1',
+                descrizione: 'Parcheggio situato in centro città, vicino a negozi e ristoranti. Offre 50 posti auto e tariffe convenienti.',
+                lat: 45.555643027580615,
+                lng: 10.21607865816928
             },
             {
                 id: 2,
-                name: 'Parcheggio 2',
-                description: 'Parcheggio coperto con 100 posti auto, situato vicino a un centro commerciale. Offre tariffe orarie e abbonamenti mensili.',
+                nome: 'Parcheggio 2',
+                descrizione: 'Parcheggio coperto con 100 posti auto, situato vicino a un centro commerciale. Offre tariffe orarie e abbonamenti mensili.',
+                lat: 45.556458128508915,
+                lng: 10.214501303702997
             },
             {
                 id: 3,
-                name: 'Parcheggio 3',
-                description: "Parcheggio all'aperto con 30 posti auto, situato vicino a un parco pubblico. Offre tariffe giornaliere e settimanali.",
+                nome: 'Parcheggio 3',
+                descrizione: "Parcheggio all'aperto con 30 posti auto, situato vicino a un parco pubblico. Offre tariffe giornaliere e settimanali.",
+                lat: 45.5549368476325,
+                lng: 10.21519329610318
             }
         ];
     },
@@ -43,9 +49,7 @@ export const api = {
                 parkingId: 1,
                 userId: 1,
                 startTime: '2024-06-01T10:00:00Z',
-                endTime: '2024-06-02T12:00:00Z',
-                lat: 45.555643027580615,
-                lng: 10.21607865816928
+                endTime: '2024-06-02T12:00:00Z'
             },
             {
                 id: 2,
@@ -53,9 +57,7 @@ export const api = {
                 parkingId: 2,
                 userId: 2,
                 startTime: '2024-06-01T10:00:00Z',
-                endTime: '2024-06-01T12:00:00Z',
-                lat: 45.556458128508915,
-                lng: 10.214501303702997
+                endTime: '2024-06-01T12:00:00Z'
             },
             {
                 id: 3,
@@ -63,9 +65,7 @@ export const api = {
                 parkingId: 3,
                 userId: 3,
                 startTime: '2024-06-01T10:00:00Z',
-                endTime: '2024-06-01T12:00:00Z',
-                lat: 45.5549368476325,
-                lng: 10.21519329610318
+                endTime: '2024-06-01T12:00:00Z'
             }
         ]
     }
