@@ -24,11 +24,10 @@ function Navbar() {
                         <li>
                             <a className="justify-between">
                                 Profile
-                                <span className="badge">New</span>
                             </a>
                         </li>
                         <li><a>Settings</a></li>
-                        <li><a>Logout</a></li>
+                        <li><a href="/auth">Logout</a></li>
                     </ul>
                 </div>
             </div>
