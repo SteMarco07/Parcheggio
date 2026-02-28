@@ -44,6 +44,23 @@ class ParcheggiController{
             ->withHeader('Content-Type', 'application/json');
     }
 
+    public function getReservatonById(Request $request, Response $response, array $args): Response {
+        $pren_id = $args['pren_id'];
+        $prenotazioni = $this->parcheggiRepository->getReservationById($pren_id);
+        $response->getBody()->write(json_encode($prenotazioni));
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+
+    public function getReservatonByUserId(Request $request, Response $response, array $args): Response {
+        $user_id = $args['user_id'];
+        $prenotazioni = $this->parcheggiRepository->getReservationByUserId($user_id);
+        $response->getBody()->write(json_encode($prenotazioni));
+        return $response
+            ->withHeader('Content-Type', 'application/json');
+    }
+
+
     public function userCreateReservation(Request $request, Response $response, array $args) : Response {
         $prenotazione = $this->parcheggiRepository->userCreateReservation(
             $request->getParsedBody()['id'],
@@ -82,6 +99,5 @@ class ParcheggiController{
         return $response
                 ->withHeader('Content-Type', 'application/json');
     }
-
 
 }

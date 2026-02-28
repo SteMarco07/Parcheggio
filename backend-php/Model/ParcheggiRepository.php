@@ -27,6 +27,22 @@ class ParcheggiRepository{
         return $stmt->fetchAll();
     }
 
+    public function getReservationById(string $id) : array {
+        $stmt = $this->pdo->prepare('SELECT * FROM reservation WHERE id = :id');
+        $stmt->execute([
+            'id' => $id
+        ]);
+        return $stmt->fetchAll();
+    }
+
+    public function getReservationByUserId($user_id) : array {
+        $stmt = $this->pdo->prepare('SELECT * FROM reservation WHERE user_id = :user_id');
+        $stmt->execute([
+            'user_id' => $user_id
+        ]);
+        return $stmt->fetchAll();
+    }
+
     public function userCreateReservation(string $id, string $first_name, string $last_name, string $license_plate, string $start_time, string $end_time, string $id_parking_lot) : array
     {
         //Logica di creazione
