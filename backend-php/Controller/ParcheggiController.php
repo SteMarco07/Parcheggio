@@ -23,7 +23,7 @@ class ParcheggiController{
 
     public function getParcheggioById(Request $request, Response $response, array $args): Response
     {
-        $parcheggio = $this->parcheggiRepository->getParcheggioById($args['id']);
+        $parcheggio = $this->parcheggiRepository->getParcheggioById($args['park_id']);
         if ($parcheggio) {
             $response->getBody()->write(json_encode($parcheggio));
             $response->withStatus(200);
