@@ -2,6 +2,7 @@
 
 use Psr\Http\Message\ResponseInterface as Response;
 use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Server\RequestHandlerInterface as RequestHandler;
 use Slim\Exception\HttpUnauthorizedException;
 use Slim\Factory\AppFactory;
 
@@ -25,6 +26,24 @@ $app = AppFactory::create();
 
 $app->setBasePath($config['BASEPATH']);
 $app->addBodyParsingMiddleware();
+
+// CORS middleware
+$corsMiddleware = function (Request $request, RequestHandler $handler) use ($app) {
+    $response = $handler->handle($request);
+
+    return $response
+        ->withHeader('Access-Control-Allow-Origin', '*')
+        ->withHeader('Access-Control-Allow-Headers', 'X-Requested-With, Content-Type, Accept, Origin, Authorization')
+        ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
+        ->withHeader('Access-Control-Allow-Credentials', 'true');
+};
+
+$app->add($corsMiddleware);
+
+// Global preflight route (matches any route) like Slim v3 cookbook
+$app->options('/{routes:.+}', function (Request $request, Response $response, $args) {
+    return $response;
+});
 
 $customErrorHandler = function (
     Request $request,
