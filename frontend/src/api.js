@@ -1,6 +1,6 @@
 import { use } from "react"
 
-const BASE = 'http://127.0.0.1:11000'
+const BASE = 'http://127.0.0.1:9080/parcheggi'
 
 async function request(path, options = {}) {
     const res = await fetch(BASE + path, options)
@@ -17,23 +17,7 @@ async function request(path, options = {}) {
 
 export const api = {
     fetchParcheggi: () => {
-        return [
-            {
-                id: 1,
-                name: 'Parcheggio 1',
-                description: 'Parcheggio situato in centro città, vicino a negozi e ristoranti. Offre 50 posti auto e tariffe convenienti.',
-            },
-            {
-                id: 2,
-                name: 'Parcheggio 2',
-                description: 'Parcheggio coperto con 100 posti auto, situato vicino a un centro commerciale. Offre tariffe orarie e abbonamenti mensili.',
-            },
-            {
-                id: 3,
-                name: 'Parcheggio 3',
-                description: "Parcheggio all'aperto con 30 posti auto, situato vicino a un parco pubblico. Offre tariffe giornaliere e settimanali.",
-            }
-        ];
+        return request("/park")
     },
     fetchPrenotazioni: () => {
         return [
