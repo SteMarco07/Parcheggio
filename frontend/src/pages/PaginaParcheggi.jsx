@@ -1,4 +1,4 @@
-import ElencoParcheggi from '../components/ElencoParcheggi.jsx';
+import ElencoParcheggi from '../components/parcheggi/ElencoParcheggi.jsx';
 import Mappa from '../components/Mappa.jsx';
 
 function PaginaParcheggi() {

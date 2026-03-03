@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { MapContainer, TileLayer, useMap, useMapEvents, Marker, Popup } from 'react-leaflet'
 import { useStore } from '../store.jsx'
-import ParcheggioCard from './ParcheggioCard.jsx';
+import ParcheggioCardPopup from './parcheggi/ParcheggioPopup.jsx';
+import ParcheggioPopup from './parcheggi/ParcheggioPopup.jsx';
 
 
 function MapSync() {
@@ -43,7 +44,7 @@ function Mappa() {
         parcheggi.map((parcheggio) => (
           <Marker key={parcheggio.id} position={[parcheggio.lat, parcheggio.lng]}>
             <Popup>
-             <ParcheggioCard parcheggio={parcheggio} />
+             <ParcheggioPopup parcheggio={parcheggio} />
             </Popup>
           </Marker>
         ))

@@ -1,5 +1,5 @@
-import pIcon from '../assets/p_parcheggio.svg';
-import { useStore } from '../store';
+import pIcon from '../../assets/p_parcheggio.svg';
+import { useStore } from '../../store';
 
 
 function ElencoParcheggi() {
