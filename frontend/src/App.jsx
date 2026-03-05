@@ -9,6 +9,7 @@ import Navbar from './components/Navbar.jsx';
 import PaginaParcheggi from './pages/PaginaParcheggi.jsx';
 import PaginaPrenotazioni from './pages/PaginaPrenotazioni.jsx';
 import PaginaAutenticazione from './pages/PaginaAutenticazione.jsx';
+import PaginaAcquistoPrenotazione from './pages/PaginaAcquistoPrenotazione.jsx';
 
 function App() {
   const { loadFromLocalStorage, fetchParcheggi, fetchPrenotazioni } = useStore();
@@ -42,6 +43,15 @@ function App() {
             <>
               <Navbar />
               <PaginaPrenotazioni />
+            </>
+          }
+          />
+
+          {/* Rotta verso la pagina per acquistare prenotazioni */}
+          <Route path="/prenotazione" element={
+            <>
+              <Navbar />
+              <PaginaAcquistoPrenotazione />
             </>
           }
           />
