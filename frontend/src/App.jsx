@@ -48,7 +48,7 @@ function App() {
           />
 
           {/* Rotta verso la pagina per acquistare prenotazioni */}
-          <Route path="/prenotazione" element={
+          <Route path="/carrello" element={
             <>
               <Navbar />
               <PaginaCarrello />

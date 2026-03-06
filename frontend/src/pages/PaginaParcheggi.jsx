@@ -6,9 +6,9 @@ function PaginaParcheggi() {
 
     return (
         <>
+        
         {/* Area Main: Occupa tutto lo spazio restante (100vh - 64px) */}
         <div className="h-[calc(100vh-64px)] w-full px-6 py-7">
-            
             {/* OrarioParcheggi come riga intera sopra */}
             <div className="flex justify-center mb-3 sm:mb-4">
                 <div className="w-full sm:w-auto">
@@ -21,12 +21,12 @@ function PaginaParcheggi() {
                 <div className="flex flex-col md:flex-row w-full h-[calc(100%-5rem)] gap-4">
                 
                 {/* Mappa: full width su mobile con altezza fissa, desktop usa altezza piena */}
-                <div className="w-full md:w-[70%] h-[50vh] md:h-full rounded-xl overflow-hidden shadow-lg border border-gray-200">
+                <div className="w-full md:w-[80%] h-[50vh] md:h-full rounded-xl overflow-hidden shadow-lg border border-gray-200">
                     <Mappa />
                 </div>
 
                 {/* Elenco: full width su mobile, desktop usa 30% e scrolla */}
-                <div className="w-full md:w-[30%] h-[40vh] md:h-full bg-white overflow-hidden">
+                <div className="w-full md:w-[20%] h-[40vh] md:h-full bg-white overflow-hidden">
                     <ElencoParcheggi />
                 </div>
 
