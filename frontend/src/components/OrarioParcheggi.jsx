@@ -49,7 +49,7 @@ function OrarioParcheggi() {
                             <option disabled value="">Scegli parcheggio</option>
                             <option>Boom</option>
                             <option>Tung</option>
-                            <option>Nigor</option>
+                            <option>Laaa</option>
                         </select>
                     </div>
 

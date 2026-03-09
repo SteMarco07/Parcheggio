@@ -23,7 +23,7 @@ AppFactory::setContainer($container);
 $app = AppFactory::create();
 $app->setBasePath($config['BASEPATH']);
 
-
+//Rotta di default per debugging
 $app->get('/', function (Request $request, Response $response, $args): Response {
 
     $response->getBody()->write("rotta default");

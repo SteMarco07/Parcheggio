@@ -21,12 +21,12 @@ function PaginaParcheggi() {
                 <div className="flex flex-col md:flex-row w-full h-[calc(100%-5rem)] gap-4">
                 
                 {/* Mappa: full width su mobile con altezza fissa, desktop usa altezza piena */}
-                <div className="w-full md:w-[80%] h-[50vh] md:h-full rounded-xl overflow-hidden shadow-lg border border-gray-200">
+                <div className="w-full md:w-[75%] h-[50vh] md:h-full rounded-xl overflow-hidden shadow-lg border border-gray-200">
                     <Mappa />
                 </div>
 
                 {/* Elenco: full width su mobile, desktop usa 30% e scrolla */}
-                <div className="w-full md:w-[20%] h-[40vh] md:h-full bg-white overflow-hidden">
+                <div className="w-full md:w-[25%] h-[40vh] md:h-full bg-white overflow-hidden">
                     <ElencoParcheggi />
                 </div>
 

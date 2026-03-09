@@ -7,7 +7,7 @@ function PaginaCarrello() {
     return (
         <>
         
-            <a > Nigga il tuo carrello</a>
+            <a>Il tuo carrello</a>
             {/* Area Main: Occupa tutto lo spazio restante (100vh - 64px) */}
             <div className="h-[calc(100vh-64px)] w-full px-6 py-7">
 
