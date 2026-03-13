@@ -1,18 +1,201 @@
+import { useState, useEffect } from "react";
 import PrenotazioneCard from "../components/PrenotazioneCard.jsx";
-import { useStore } from "../store.jsx";
+import { api } from "../api.js";
+import DatePicker from "react-datepicker";
+import { registerLocale } from "react-datepicker";
+import it from "date-fns/locale/it";
+import "react-datepicker/dist/react-datepicker.css";
+
+registerLocale("it", it);
 
 function PaginaPrenotazioni() {
-  // Prendo prenotazioni, fieldsets e la funzione addFieldset dallo store
-  const { prenotazioni, fieldsets, addFieldset } = useStore();
+  const [prenotazioni, setPrenotazioni] = useState([]);
+  const [prenotazioneDaModificare, setPrenotazioneDaModificare] = useState(null);
+
+  useEffect(() => {
+    setPrenotazioni(api.fetchPrenotazioni());
+  }, []);
+
+  const eliminaPrenotazione = (id) => {
+    setPrenotazioni(prenotazioni.filter((p) => p.id !== id));
+  };
+
+  const apriModifica = (prenotazione) => setPrenotazioneDaModificare(prenotazione);
+  const chiudiModifica = () => setPrenotazioneDaModificare(null);
+
+  const salvaModifiche = (prenotazioneModificata) => {
+    setPrenotazioni(
+      prenotazioni.map((p) =>
+        p.id === prenotazioneModificata.id ? prenotazioneModificata : p
+      )
+    );
+    chiudiModifica();
+  };
+
+  const ModaleModifica = () => {
+    const pren = prenotazioneDaModificare;
+    const now = new Date();
+    const initialStart = pren.startTime ? new Date(pren.startTime) : now;
+    const initialEnd = pren.endTime
+      ? new Date(pren.endTime)
+      : new Date(initialStart.getTime() + 60 * 60 * 1000); // +1 ora
+
+    const [nome, setNome] = useState(pren.nome || "");
+    const [startDateTime, setStartDateTime] = useState(initialStart);
+    const [endDateTime, setEndDateTime] = useState(initialEnd);
+
+    const timeSlots = Array.from({ length: 24 }, (_, i) =>
+      `${i.toString().padStart(2, "0")}:00`
+    );
+
+    const formatHour = (date) => `${date.getHours().toString().padStart(2, "0")}:00`;
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      if (startDateTime < new Date()) {
+        alert("La data di inizio non può essere nel passato.");
+        return;
+      }
+      if (endDateTime < new Date()) {
+        alert("La data di fine non può essere nel passato.");
+        return;
+      }
+      if (endDateTime < startDateTime) {
+        alert("La data di fine non può essere precedente alla data di inizio.");
+        return;
+      }
+
+      salvaModifiche({
+        ...pren,
+        nome,
+        startTime: startDateTime.toISOString(),
+        endTime: endDateTime.toISOString(),
+      });
+    };
+
+    const CustomInput = ({ value, onClick }) => (
+      <input
+        className="border p-2 rounded w-full cursor-pointer"
+        value={value}
+        onClick={onClick}
+        readOnly
+      />
+    );
+
+    return (
+      <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-white p-6 rounded-lg shadow-xl w-96 space-y-4 border-2 border-gray-300 pointer-events-auto"
+        >
+          <h2 className="text-xl font-semibold">Modifica Prenotazione</h2>
+
+          <label className="flex flex-col">
+            Nome
+            <input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+              className="border p-2 rounded"
+            />
+          </label>
+
+          <label className="flex flex-col">
+            Inizio
+            <div className="flex gap-2 items-center">
+              <DatePicker
+                selected={startDateTime}
+                onChange={(date) => {
+                  setStartDateTime(date);
+                  // se inizio >= fine, sposta la fine 1 ora dopo
+                  if (date >= endDateTime) {
+                    const newEnd = new Date(date);
+                    newEnd.setHours(date.getHours() + 1, date.getMinutes(), 0, 0);
+                    setEndDateTime(newEnd);
+                  }
+                }}
+                dateFormat="dd/MM/yyyy"
+                locale="it"
+                minDate={new Date()}
+                customInput={<CustomInput />}
+              />
+              <select
+                className="border p-2 rounded"
+                value={formatHour(startDateTime)}
+                onChange={(e) => {
+                  const [hours] = e.target.value.split(":").map(Number);
+                  const d = new Date(startDateTime);
+                  d.setHours(hours, 0, 0, 0);
+                  setStartDateTime(d);
+                  if (d >= endDateTime) {
+                    const newEnd = new Date(d);
+                    newEnd.setHours(d.getHours() + 1, d.getMinutes(), 0, 0);
+                    setEndDateTime(newEnd);
+                  }
+                }}
+              >
+                {timeSlots.map((t) => (
+                  <option key={t}>{t}</option>
+                ))}
+              </select>
+            </div>
+          </label>
+
+          <label className="flex flex-col">
+            Fine
+            <div className="flex gap-2 items-center">
+              <DatePicker
+                selected={endDateTime}
+                onChange={setEndDateTime}
+                dateFormat="dd/MM/yyyy"
+                locale="it"
+                minDate={startDateTime}
+                customInput={<CustomInput />}
+              />
+              <select
+                className="border p-2 rounded"
+                value={formatHour(endDateTime)}
+                onChange={(e) => {
+                  const [hours] = e.target.value.split(":").map(Number);
+                  const d = new Date(endDateTime);
+                  d.setHours(hours, 0, 0, 0);
+                  if (d < startDateTime) {
+                    d.setHours(startDateTime.getHours() + 1, 0, 0, 0);
+                  }
+                  setEndDateTime(d);
+                }}
+              >
+                {timeSlots.map((t) => (
+                  <option key={t}>{t}</option>
+                ))}
+              </select>
+            </div>
+          </label>
+
+          <div className="flex justify-end gap-2 mt-4">
+            <button
+              type="button"
+              onClick={chiudiModifica}
+              className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+            >
+              Annulla
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+            >
+              Salva
+            </button>
+          </div>
+        </form>
+      </div>
+    );
+  };
 
   return (
     <div className="p-6 space-y-6">
-      {/* Titolo + bottone */}
-      <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-semibold mb-4">Prenotazioni</h2>
-      </div>
+      <h2 className="text-2xl font-semibold mb-4">Prenotazioni</h2>
 
-      {/* Lista prenotazioni */}
       {prenotazioni.length === 0 ? (
         <p>Qui verranno mostrate le prenotazioni future.</p>
       ) : (
@@ -21,10 +204,14 @@ function PaginaPrenotazioni() {
             <PrenotazioneCard
               key={prenotazione.id}
               prenotazione={prenotazione}
+              onElimina={() => eliminaPrenotazione(prenotazione.id)}
+              onModifica={() => apriModifica(prenotazione)}
             />
           ))}
         </div>
       )}
+
+      {prenotazioneDaModificare && <ModaleModifica />}
     </div>
   );
 }
