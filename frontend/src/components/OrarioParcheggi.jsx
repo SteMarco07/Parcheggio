@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 
 registerLocale('it', it);
 
-function OrarioParcheggi() {
+function OrarioParcheggi({setRicerca}) {
     const now = new Date();
     now.setMinutes(0, 0, 0); // arrotonda all'ora
 
@@ -63,6 +63,7 @@ function OrarioParcheggi() {
         </div>
     );
 
+
     return (
         <div className="card bg-base-100 shadow-sm mb-4">
             <div className="card-body p-3 sm:p-4">
@@ -75,7 +76,12 @@ function OrarioParcheggi() {
                             Ricerca
                         </div>
                         <div className="flex flex-row items-center gap-2 w-full border border-base-300 rounded-lg p-2 pt-3">
-                            <input type="text" placeholder="Cerca..." className="input input-bordered flex flex-row items-center gap-2 w-full" />
+                            <input 
+                                type="text" 
+                                placeholder="Cerca..." 
+                                onChange={(e) => setRicerca(e.target.value)} 
+                                className="input input-bordered flex flex-row items-center gap-2 w-full" 
+                            />
                         </div>
                     </div>
                     
@@ -148,7 +154,6 @@ function OrarioParcheggi() {
                             Cerca
                         </button>
                     </div>
-
                 </div>
             </div>
         </div>

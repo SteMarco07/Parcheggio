@@ -1,8 +1,11 @@
 import ElencoParcheggi from '../components/parcheggi/ElencoParcheggi.jsx';
 import OrarioParcheggi from '../components/OrarioParcheggi.jsx';
 import Mappa from '../components/Mappa.jsx';
+import React, { useState } from 'react';
 
 function PaginaParcheggi() {
+
+  const [ricerca, setRicerca] = useState('');
 
     return (
         <>
@@ -12,7 +15,7 @@ function PaginaParcheggi() {
             {/* OrarioParcheggi come riga intera sopra */}
             <div className="flex justify-center mb-3 sm:mb-4">
                 <div className="w-full sm:w-auto">
-                    <OrarioParcheggi />
+                    <OrarioParcheggi setRicerca={setRicerca}/>
                 </div>
             </div>
 
@@ -27,7 +30,7 @@ function PaginaParcheggi() {
 
                 {/* Elenco: full width su mobile, desktop usa 30% e scrolla */}
                 <div className="w-full md:w-[25%] h-[40vh] md:h-full bg-white overflow-hidden">
-                    <ElencoParcheggi />
+                    <ElencoParcheggi ricerca={ricerca}/>
                 </div>
 
             </div>

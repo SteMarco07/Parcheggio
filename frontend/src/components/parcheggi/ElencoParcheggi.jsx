@@ -3,8 +3,12 @@ import { useStore } from '../../store';
 import ParcheggioCard from './ParcheggioCard.jsx';
 
 
-function ElencoParcheggi() {
+function ElencoParcheggi({ricerca}) {
   const { parcheggi } = useStore();
+
+  const parcheggiFiltrati = parcheggi.filter((p) =>
+    (p.nome ?? "").toLowerCase().includes(ricerca.toLowerCase())
+  );
 
   return (
     <div className="join border border-black rounded-box join-vertical gap-4 h-full ">
@@ -14,7 +18,7 @@ function ElencoParcheggi() {
           <h2 className="text-3xl font-semibold">Parcheggi disponibili</h2>
         </div>
         <div className='overflow-y-auto flex-1'>
-          {parcheggi.map((item) => (
+          {parcheggiFiltrati.map((item) => (
             <div key={item.id} className="card card-border w-full bg-base-90 shadow-xl mb-4">
               <div className="card-body">
                 <ParcheggioCard parcheggio={item} />
