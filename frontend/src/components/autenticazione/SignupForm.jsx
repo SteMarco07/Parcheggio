@@ -1,11 +1,13 @@
-import React, { useState } from "react";
-import { useStore } from "../store.jsx";
+import React, { useEffect, useState } from "react";
+import { useStore } from "../../store.jsx";
 import { useNavigate } from 'react-router-dom';
 
 
 function SignupForm() {
 
     const { setAuthMode } = useStore();
+    const { utente, setUser } = useStore();
+
     const [name, setName] = useState("");
     const [surname, setSurname] = useState("");
     const [email, setEmail] = useState("");
@@ -21,8 +23,15 @@ function SignupForm() {
             alert("Le password non corrispondono");
             return;
         }
-        console.log("Signup submit:", { name, surname, email, targa });
-        // qui andrebbe la chiamata all'API per registrare; al momento navighiamo direttamente
+
+        setUser({
+            nome: name,
+            cognome: surname,
+            email: email,
+            targa: [targa],
+            password: password
+        });
+
         navigate('/parcheggi');
     }
 
@@ -71,7 +80,6 @@ function SignupForm() {
                         <button type="submit" className="btn btn-primary w-[50%]">Registrati</button>
                     </div>
                 </div>
-
 
             </form>
 

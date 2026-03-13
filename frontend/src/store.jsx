@@ -79,6 +79,10 @@ export const useStore = create((set, get) => ({
         }
     },
 
+    setUser: (userData) => {
+        set({ utente: userData});
+    },
+
     // 1. Fetch dei dati (Asincrona)
     fetchParcheggi: async () => {
         set({ isLoading: true, error: null });

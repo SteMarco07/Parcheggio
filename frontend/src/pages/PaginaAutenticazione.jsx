@@ -2,8 +2,8 @@ import { useState } from "react";
 import { useStore } from "../store.jsx";
 import { useNavigate } from 'react-router-dom';
 
-import LoginForm from "../components/LoginForm";
-import SignupForm from "../components/SignupForm";
+import LoginForm from "../components/autenticazione/LoginForm.jsx";
+import SignupForm from "../components/autenticazione/SignupForm.jsx";
 
 
 function PaginaAutenticazione() {

@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { useStore } from "../store.jsx";
+import { useStore } from "../../store.jsx";
 import { useNavigate } from 'react-router-dom';
 
 function LoginForm() {
