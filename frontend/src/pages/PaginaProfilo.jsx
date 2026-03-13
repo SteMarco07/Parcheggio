@@ -11,43 +11,116 @@ const PaginaProfilo = ({ user: propUser }) => {
         }
     })();
 
-    const user = {
+    const defaultUser = {
         nome: 'Mario',
         cognome: 'Rossi',
         email: 'mrossi@example.com',
         targa: 'AB123CD'
     };
 
-    return (
-        <div className="px-6 py-8 max-w-2xl mx-auto">
-            <h1 className="text-5xl font-bold mb-16 text-center">Profilo</h1>
+    const user = storedUser || propUser || defaultUser;
 
-            <div className="card bg-base-100 shadow-md card-xl">
-                <div className="card-body">
-                    <div className="space-y-3">
+    const initials = `${(user.nome || '').charAt(0)}${(user.cognome || '').charAt(0)}`.toUpperCase();
+
+    const fieldsOrder = ['nome', 'cognome', 'email', 'targa'];
+    const labelFor = (field) => {
+        switch (field) {
+            case 'nome': return 'Nome';
+            case 'cognome': return 'Cognome';
+            case 'email': return 'Email';
+            case 'targa': return 'Targa';
+            default: return field;
+        }
+    };
+
+    const [copied, setCopied] = React.useState('');
+
+    function copyToClipboard(value) {
+        if (!navigator.clipboard) return;
+        navigator.clipboard.writeText(value).then(() => {
+            setCopied(value);
+            setTimeout(() => setCopied(''), 1800);
+        }).catch(() => {});
+    }
+
+    return (
+        <div className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-linear-to-b from-indigo-50 to-white">
+            <div className="max-w-3xl mx-auto">
+                <header className="mb-8 text-center">
+                    <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-800">Il tuo profilo</h1>
+                    <p className="mt-2 text-sm text-gray-500">Gestisci le tue informazioni e le prenotazioni</p>
+                </header>
+
+                <div className="bg-white shadow-lg rounded-2xl overflow-hidden">
+                    <div className="p-6 sm:p-8">
+                        <div className="flex flex-col sm:flex-row sm:items-center sm:gap-6">
+                            <div className="flex items-center gap-4">
+                                <div className="w-20 h-20 rounded-full bg-linear-to-br from-indigo-400 to-purple-500 flex items-center justify-center text-white text-2xl font-bold shadow-md">
+                                    {initials}
+                                </div>
+                                <div>
+                                    <div className="text-lg font-semibold text-gray-800">{user.nome} {user.cognome}</div>
+                                    <div className="text-sm text-gray-500">Utente registrato</div>
+                                </div>
+                            </div>
+
                         
-                        {
-                            Object.keys(user).map((field) => (
-                                <div key={field} className="flex justify-between items-center py-3 gap-10">
-                                    <div className="label text-lg"><span className="label-text">{field.charAt(0).toUpperCase() + field.slice(1)} </span></div>
-                                    <div className="text-lg">{user[field]}</div>
+                        </div>
+
+                        <hr className="my-6 border-gray-100" />
+
+                        <dl className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                            {fieldsOrder.map((field) => (
+                                <div key={field} className="flex flex-col">
+                                    <dt className="text-xs text-gray-400 uppercase tracking-wider mb-1">{labelFor(field)}</dt>
+                                    <dd className="flex items-center justify-between text-gray-700">
+                                        <span className="wrap-break-word max-w-xs">{user[field]}</span>
+                                     
+                                         <div className="flex items-center gap-2">
+                                            {field === 'email' && (
+                                                <button
+                                                    title="Invia email"
+                                                    className="btn btn-ghost btn-sm"
+                                                    onClick={() => window.location.href = `mailto:${user.email}`}
+                                                >
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
+                                                </button>
+                                            )}
+
+                                            <button
+                                                title="Copia"
+                                                className="btn btn-ghost btn-sm"
+                                                onClick={() => copyToClipboard(user[field])}
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 16h8M8 12h8M8 8h8M4 6h.01M4 18h.01M4 12h.01" /></svg>
+                                            </button>
+                                        </div>
+                                    </dd>
                                 </div>
                             ))}
-                    </div>
+                        </dl>
 
-                    <div className="mt-6 flex items-center justify-around">
-                        <button className="btn btn-success"
-                        onClick={() => {
-                            window.location.href = '/parcheggi';
-                        }}
-                        >Home</button>
-                        <button className="btn btn-error"
-                        onClick={() => {
-                            window.location.href = '/auth';
-                        }}
-                        >Logout</button>
+                        {copied && (
+                            <div className="mt-5 text-sm text-green-600">Copiato: <strong>{copied}</strong></div>
+                        )}
+
+                        <div className="mt-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                            <div className="text-sm text-gray-500">Hai bisogno di aggiornare le informazioni? <br /> Puoi modificare i dettagli nel profilo.</div>
+
+                            <div className="flex gap-3 w-[50%]">
+                                <button
+                                    className="btn btn-outline flex-1"
+                                    onClick={() => alert('Funzione modifica non implementata')}
+                                >Modifica profilo</button>
+                                <button
+                                    className="btn btn-error flex-1"
+                                    onClick={() => window.location.href = '/auth'}
+                                >Logout</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
+
             </div>
         </div>
     );
