@@ -41,9 +41,7 @@ $corsMiddleware = function (Request $request, RequestHandler $handler) use ($app
 $app->add($corsMiddleware);
 
 // Global preflight route (matches any route) like Slim v3 cookbook
-$app->options('/{routes:.+}', function (Request $request, Response $response, $args) {
-    return $response;
-});
+$app->options('/{routes:.+}', function (Request $request, Response $response, $args) { return $response; });
 
 $customErrorHandler = function (
     Request $request,
@@ -53,19 +51,13 @@ $customErrorHandler = function (
     bool $logErrorDetails
 ) use ($app) {
     $payload = ['error' => $exception->getMessage()];
-
     $response = $app->getResponseFactory()->createResponse();
     $engine = $app->getContainer()->get('template');
 
-    if ($exception instanceof \Slim\Exception\HttpNotFoundException) {
-        $response ->getBody()->write($engine->render('404', $payload));
-    } else if ($exception instanceof HttpUnauthorizedException) {
-        $response ->getBody()->write($engine->render('401', $payload));
-    }
+    if ($exception instanceof \Slim\Exception\HttpNotFoundException) { $response ->getBody()->write($engine->render('404', $payload)); }
+    else if ($exception instanceof HttpUnauthorizedException) { $response ->getBody()->write($engine->render('401', $payload)); }
 
-    $response->getBody()->write(
-        json_encode($payload, JSON_UNESCAPED_UNICODE)
-    );
+    $response->getBody()->write(json_encode($payload, JSON_UNESCAPED_UNICODE));
 
     return $response
         ->withHeader('Content-Type', 'application/json')
@@ -73,14 +65,10 @@ $customErrorHandler = function (
 };
 
 $errorMiddleware = $app->addErrorMiddleware(true, true, true);
-if ($config['PRODUCTION']) {
-    $errorMiddleware->setDefaultErrorHandler($customErrorHandler);
-}
+if ($config['PRODUCTION']) { $errorMiddleware->setDefaultErrorHandler($customErrorHandler); }
 
 $app->get('/', function (Request $request, Response $response, $args): Response {
-
     $response->getBody()->write("rotta default");
-
     return $response;
 });
 
