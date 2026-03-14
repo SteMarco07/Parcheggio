@@ -12,15 +12,28 @@ export const useStore = create((set, get) => ({
     position: [45.55584514965588, 10.216172766008182],
     zoom: 18,
     authMode: "login",
-    utente: {
-        nome: "",
-        cognome: "",
-        email: "",
-        taga: [],
-        password: ""
-    },
-
-    // aggiungi dentro create(...)
+    utente: (() => {
+        try {
+            const raw = localStorage.getItem('user');
+            return raw ? JSON.parse(raw) : {
+                nome: "",
+                cognome: "",
+                email: "",
+                targa: "",
+                password: "",
+                iniziali: ""
+            };
+        } catch (e) {
+            return {
+                nome: "",
+                cognome: "",
+                email: "",
+                targa: "",
+                password: "",
+                iniziali: ""
+            };
+        }
+    })(),
 
     addFieldset: () =>
     set((state) => ({
@@ -80,7 +93,21 @@ export const useStore = create((set, get) => ({
     },
 
     setUser: (userData) => {
+        try {
+            localStorage.setItem('user', JSON.stringify(userData));
+        } catch (e) {
+            // ignore storage errors
+        }
         set({ utente: userData});
+    },
+
+    clearUser: () => {
+        try {
+            localStorage.removeItem('user');
+        } catch (e) {
+            // ignore storage errors
+        }
+        set({ utente: { nome: "", cognome: "", email: "", targa: "", password: "", iniziali: "" } });
     },
 
     // 1. Fetch dei dati (Asincrona)
