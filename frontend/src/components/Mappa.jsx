@@ -34,18 +34,15 @@ function CenterLogger() {
   return null
 }
 
-function Mappa({ ricerca }) {
-  const { parcheggi, position, zoom } = useStore()
+function Mappa() {
+  const { parcheggiFiltrati, position, zoom } = useStore()
 
-  const filteredParcheggi = parcheggi.filter((p) =>
-    (p.nome ?? "").toLowerCase().includes(ricerca.toLowerCase()) || (p.descrizione ?? "").toLowerCase().includes(ricerca.toLowerCase())
-  );
 
   return (
     <MapContainer center={position} zoom={zoom} style={{ height: '100%', width: '100%', zIndex: 0 }}>
       <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" attribution='&copy; OpenStreetMap' />
       {
-        filteredParcheggi.map((parcheggio) => (
+        parcheggiFiltrati.map((parcheggio) => (
           <Marker key={parcheggio.id} position={[parcheggio.lat, parcheggio.lng]}>
             <Popup>
              <ParcheggioPopup parcheggio={parcheggio} />

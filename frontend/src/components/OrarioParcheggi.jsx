@@ -3,10 +3,12 @@ import DatePicker from 'react-datepicker';
 import { registerLocale } from 'react-datepicker';
 import it from 'date-fns/locale/it';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useStore } from '../store.jsx';
 
 registerLocale('it', it);
 
-function OrarioParcheggi({setRicerca}) {
+function OrarioParcheggi() {
+    const { setRicerca } = useStore();
     const now = new Date();
     now.setMinutes(0, 0, 0); // arrotonda all'ora
 

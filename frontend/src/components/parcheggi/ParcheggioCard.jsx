@@ -4,7 +4,7 @@ import { useStore } from '../../store.jsx';
 
 function ParcheggioCard({ parcheggio }) {
 
-  const [p, setParcheggio] = useState(parcheggio);
+  const [p, setP] = useState(parcheggio);
 
   const {modifyPosition, modifyZoom} = useStore();
 

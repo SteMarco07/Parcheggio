@@ -5,6 +5,8 @@ import { api } from './api';
 export const useStore = create((set, get) => ({
     // STATO INIZIALE
     parcheggi: [],
+    parcheggiFiltrati: [],
+    ricerca : "",
     prenotazioni: [],
     isLoading: false,    
     fieldsets: [],
@@ -89,6 +91,7 @@ export const useStore = create((set, get) => ({
         try {
             const data = await api.fetchParcheggi();
             set({ parcheggi: data, isLoading: false });
+            set({ parcheggiFiltrati: data, isLoading: false });
         } catch (err) {
             set({ error: err.message, isLoading: false });
         }
@@ -103,5 +106,20 @@ export const useStore = create((set, get) => ({
             set({ error: err.message, isLoading: false });
         }
     },
+
+    setRicerca: (testo) => {
+        console.log("Imposto ricerca:", testo);
+        set({ ricerca: testo, isLoading: false });
+        get().filtraParcheggi();
+    },
+
+    filtraParcheggi: () => {
+        const { parcheggi, ricerca } = get();
+        const filtrati = parcheggi.filter((p) =>
+            (p.nome ?? "").toLowerCase().includes(ricerca.toLowerCase()) ||
+            (p.descrizione ?? "").toLowerCase().includes(ricerca.toLowerCase())
+        );
+        set({ parcheggiFiltrati: filtrati });
+    }
 
 }));

@@ -3,12 +3,8 @@ import { useStore } from '../../store';
 import ParcheggioCard from './ParcheggioCard.jsx';
 
 
-function ElencoParcheggi({ricerca}) {
-  const { parcheggi } = useStore();
-
-  const parcheggiFiltrati = parcheggi.filter((p) =>
-    (p.nome ?? "").toLowerCase().includes(ricerca.toLowerCase()) || (p.descrizione ?? "").toLowerCase().includes(ricerca.toLowerCase())
-  );
+function ElencoParcheggi() {
+  const { parcheggiFiltrati } = useStore();
 
   return (
     <div className="join border border-black rounded-box join-vertical gap-4 h-full ">
