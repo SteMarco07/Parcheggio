@@ -45,8 +45,8 @@ export const useStore = create((set, get) => ({
         localStorage.setItem('lastZoom', JSON.stringify(newZoom));
 
         set({ zoom: newZoom });
-        console.log('Zoom:', newZoom);
-        console.log('Posizione:', get().position);
+        //console.log('Zoom:', newZoom);
+        //console.log('Posizione:', get().position);
     },
 
     // Carica posizione/zoom da localStorage
@@ -108,7 +108,7 @@ export const useStore = create((set, get) => ({
     },
 
     setRicerca: (testo) => {
-        console.log("Imposto ricerca:", testo);
+        //console.log("Imposto ricerca:", testo);
         set({ ricerca: testo, isLoading: false });
         get().filtraParcheggi();
     },

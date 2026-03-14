@@ -17,9 +17,8 @@ function ParcheggioCard({ parcheggio }) {
   return (
     <div onClick={handleClick}>
       <h1 className="text-xl font-bold">{p.nome}</h1>
-      <p>Indirizzo: {p.indirizzo || "Indirizzo"}</p>
       <p>Posti disponibili: {p.postiDisponibili || 0}</p>
-      <p>Descrizione: {p.descrizione || "Descrizione"}</p>
+      <p>Descrizione: {p.descrizione || "nessuna descrizione presente"}</p>
     </div>
   );
 }

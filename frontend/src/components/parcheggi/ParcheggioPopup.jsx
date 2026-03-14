@@ -12,7 +12,6 @@ function ParcheggioPopup({parcheggio}) {
                 <button className="btn btn-neutral" onClick={() => {
                     navigate('/prenotazioni')
                 }
-
                 }>Prenota</button>
             </div>
             </div>
