@@ -7,7 +7,7 @@ function ElencoParcheggi({ricerca}) {
   const { parcheggi } = useStore();
 
   const parcheggiFiltrati = parcheggi.filter((p) =>
-    (p.nome ?? "").toLowerCase().includes(ricerca.toLowerCase())
+    (p.nome ?? "").toLowerCase().includes(ricerca.toLowerCase()) || (p.descrizione ?? "").toLowerCase().includes(ricerca.toLowerCase())
   );
 
   return (
