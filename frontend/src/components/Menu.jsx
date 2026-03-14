@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+    import { Link } from 'react-router-dom'
 
 function closeDrawer() {
     const el = document.getElementById('my-drawer-1')
@@ -15,8 +15,8 @@ function Menu() {
             <div className="drawer-side">
                 <label htmlFor="my-drawer-1" aria-label="close sidebar" className="drawer-overlay"></label>
                 <ul className="menu bg-base-200 min-h-full w-80 p-4">
-                    <li><Link to="/parcheggi" onClick={closeDrawer}>Mappa parcheggi</Link></li>
-                    <li><Link to="/prenotazioni" onClick={closeDrawer}>Prenotazioni</Link></li>
+                    <li><Link to="/parcheggi" className='text-lg' onClick={closeDrawer}>Mappa parcheggi</Link></li>
+                    <li><Link to="/prenotazioni" className='text-lg' onClick={closeDrawer}>Prenotazioni</Link></li>
                 </ul>
             </div>
         </div>
