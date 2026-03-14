@@ -1,14 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
-import { useMap } from 'react-map-gl'
+import { useMap, Marker } from 'react-map-gl'
+
 import Supercluster from 'supercluster'
-import { Marker } from 'react-map-gl'
 
-
-
-const supercluster = new Supercluster({
-  radius: 60,
-  maxZoom: 16,
-})
+const supercluster = new Supercluster({ radius: 60, maxZoom: 16 })
 
 function ClusteredMarkers({ parcheggi, onMarkerClick }) {
   const { current: map } = useMap()
@@ -16,21 +11,13 @@ function ClusteredMarkers({ parcheggi, onMarkerClick }) {
 
   const updateClusters = useCallback(() => {
     if (!map) return
-
     const bounds = map.getBounds()
-    const bbox = [
-      bounds.getWest(),
-      bounds.getSouth(),
-      bounds.getEast(),
-      bounds.getNorth(),
-    ]
+    const bbox = [bounds.getWest(), bounds.getSouth(), bounds.getEast(), bounds.getNorth()]
     const zoom = Math.floor(map.getZoom())
     setClusters(supercluster.getClusters(bbox, zoom))
   }, [map])
 
-  // Sostituisci i due useEffect esistenti con questi tre
-
-  // 1. Carica i punti quando cambiano i parcheggi
+  // Carica i punti quando cambiano i parcheggi
   useEffect(() => {
     if (!parcheggi.length) return
     const points = parcheggi.map((p) => ({
@@ -42,26 +29,13 @@ function ClusteredMarkers({ parcheggi, onMarkerClick }) {
     updateClusters()
   }, [parcheggi, updateClusters])
 
-  // 2. Ascolta moveend E zoomend
   useEffect(() => {
-    if (!map) return
-    map.on('moveend', updateClusters)
-    map.on('zoomend', updateClusters)   // ← mancava questo
-    return () => {
-      map.off('moveend', updateClusters)
-      map.off('zoomend', updateClusters)
-    }
-  }, [map, updateClusters])
+  if (!map) return
+  map.on('move', updateClusters)
+  return () => map.off('move', updateClusters)
+}, [map, updateClusters])
 
-  // 3. Primo calcolo dopo che la mappa è pronta
-  useEffect(() => {
-    if (!map) return
-    if (map.isStyleLoaded()) {
-      updateClusters()
-    } else {
-      map.once('load', updateClusters)  // ← aspetta il load se non è ancora pronta
-    }
-  }, [map, updateClusters])
+
 
   return clusters.map((cluster) => {
     const [lng, lat] = cluster.geometry.coordinates
@@ -101,41 +75,70 @@ function ClusteredMarkers({ parcheggi, onMarkerClick }) {
 function SingleMarker({ parcheggio, onClick }) {
   return (
     <Marker longitude={parcheggio.lng} latitude={parcheggio.lat} onClick={onClick}>
-      <div style={{
-        width: 14,
-        height: 14,
-        borderRadius: '50%',
-        background: '#1D9E75',
-        border: '2px solid #fff',
-        boxShadow: '0 1px 4px rgba(0,0,0,0.3)',
-        cursor: 'pointer',
-      }} />
+      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', transition: 'transform .15s' }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
+      >
+        {/* testa della goccia */}
+        <div style={{
+          width: 32, height: 32,
+          borderRadius: '50% 50% 50% 0',
+          transform: 'rotate(-45deg)',
+          background: '#1D9E75',
+          boxShadow: '0 2px 8px rgba(0,0,0,.18)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <div style={{
+            width: 10, height: 10, borderRadius: '50%',
+            background: 'rgba(255,255,255,0.85)',
+            transform: 'rotate(45deg)',
+          }} />
+        </div>
+        {/* codina e ombra */}
+        <div style={{ width: 2, height: 10, background: 'rgba(0,0,0,.12)', borderRadius: '0 0 2px 2px' }} />
+        <div style={{ width: 8, height: 3, background: 'rgba(0,0,0,.10)', borderRadius: '50%', marginTop: 1 }} />
+      </div>
     </Marker>
   )
 }
 
-// Marker Cluster
 function ClusterMarker({ lng, lat, count, onClick }) {
-  const size = Math.min(20 + (count / 5) * 10, 56)
+  // dimensioni e colore crescono con il count
+  const tier = count < 5 ? 0 : count < 20 ? 1 : 2
+  const cores = [32, 36, 44]
+  const rings = [44, 52, 62]
+  const colors = ['#1D9E75', '#0F6E56', '#085041']
+  const alphas = ['rgba(29,158,117,.18)', 'rgba(15,110,86,.18)', 'rgba(8,80,65,.18)']
+  const label = count > 99 ? '99+' : String(count)
 
   return (
     <Marker longitude={lng} latitude={lat} onClick={onClick}>
       <div style={{
-        width: size,
-        height: size,
-        borderRadius: '50%',
-        background: '#185FA5',
-        border: '2.5px solid #fff',
-        boxShadow: '0 2px 6px rgba(0,0,0,0.35)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        cursor: 'pointer',
-        color: '#fff',
-        fontSize: 12,
-        fontWeight: 500,
-      }}>
-        {count}
+        width: rings[tier], height: rings[tier],
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        cursor: 'pointer', transition: 'transform .15s', position: 'relative',
+      }}
+        onMouseEnter={e => e.currentTarget.style.transform = 'scale(1.08)'}
+        onMouseLeave={e => e.currentTarget.style.transform = 'scale(1)'}
+      >
+        {/* anello esterno */}
+        <div style={{
+          position: 'absolute',
+          width: rings[tier], height: rings[tier],
+          borderRadius: '50%',
+          background: alphas[tier],
+        }} />
+        {/* nucleo */}
+        <div style={{
+          width: cores[tier], height: cores[tier],
+          borderRadius: '50%',
+          background: colors[tier],
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          color: '#fff', fontSize: tier === 2 ? 14 : 13, fontWeight: 500,
+          position: 'relative', zIndex: 1,
+        }}>
+          {label}
+        </div>
       </div>
     </Marker>
   )
