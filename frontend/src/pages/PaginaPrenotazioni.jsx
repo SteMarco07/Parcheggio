@@ -38,28 +38,36 @@ function PaginaPrenotazioni() {
     const initialStart = pren.startTime ? new Date(pren.startTime) : now;
     const initialEnd = pren.endTime
       ? new Date(pren.endTime)
-      : new Date(initialStart.getTime() + 60 * 60 * 1000); // +1 ora
+      : new Date(initialStart.getTime() + 60 * 60 * 1000);
 
     const [nome, setNome] = useState(pren.nome || "");
     const [startDateTime, setStartDateTime] = useState(initialStart);
     const [endDateTime, setEndDateTime] = useState(initialEnd);
 
+    // 👇 controlliamo apertura calendario
+    const [openStart, setOpenStart] = useState(false);
+    const [openEnd, setOpenEnd] = useState(false);
+
     const timeSlots = Array.from({ length: 24 }, (_, i) =>
       `${i.toString().padStart(2, "0")}:00`
     );
 
-    const formatHour = (date) => `${date.getHours().toString().padStart(2, "0")}:00`;
+    const formatHour = (date) =>
+      `${date.getHours().toString().padStart(2, "0")}:00`;
 
     const handleSubmit = (e) => {
       e.preventDefault();
+
       if (startDateTime < new Date()) {
         alert("La data di inizio non può essere nel passato.");
         return;
       }
+
       if (endDateTime < new Date()) {
         alert("La data di fine non può essere nel passato.");
         return;
       }
+
       if (endDateTime < startDateTime) {
         alert("La data di fine non può essere precedente alla data di inizio.");
         return;
@@ -83,10 +91,10 @@ function PaginaPrenotazioni() {
     );
 
     return (
-      <div className="fixed inset-0 flex justify-center items-center z-50 bg-black bg-opacity-50">
+      <div className="fixed inset-0 flex justify-center items-center z-50 bg-black/10 backdrop-blur-sm">
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-6 rounded-lg shadow-xl w-96 space-y-4 border-2 border-gray-300 pointer-events-auto"
+          className="bg-white p-6 rounded-lg shadow-xl w-96 space-y-4 border-2 border-gray-300"
         >
           <h2 className="text-xl font-semibold">Modifica Prenotazione</h2>
 
@@ -97,6 +105,10 @@ function PaginaPrenotazioni() {
               value={nome}
               onChange={(e) => setNome(e.target.value)}
               className="border p-2 rounded"
+              onClick={() => {
+                setOpenStart(false);
+                setOpenEnd(false);
+              }}
             />
           </label>
 
@@ -107,29 +119,42 @@ function PaginaPrenotazioni() {
                 selected={startDateTime}
                 onChange={(date) => {
                   setStartDateTime(date);
-                  // se inizio >= fine, sposta la fine 1 ora dopo
+                  setOpenStart(false);
+
                   if (date >= endDateTime) {
                     const newEnd = new Date(date);
                     newEnd.setHours(date.getHours() + 1, date.getMinutes(), 0, 0);
                     setEndDateTime(newEnd);
                   }
                 }}
+                open={openStart}
+                onInputClick={() => {
+                  setOpenStart(true);
+                  setOpenEnd(false);
+                }}
+                onClickOutside={() => setOpenStart(false)}
                 dateFormat="dd/MM/yyyy"
                 locale="it"
                 minDate={new Date()}
                 customInput={<CustomInput />}
               />
+
               <select
                 className="border p-2 rounded"
                 value={formatHour(startDateTime)}
+                onClick={() => {
+                  setOpenStart(false);
+                  setOpenEnd(false);
+                }}
                 onChange={(e) => {
                   const [hours] = e.target.value.split(":").map(Number);
                   const d = new Date(startDateTime);
                   d.setHours(hours, 0, 0, 0);
                   setStartDateTime(d);
+
                   if (d >= endDateTime) {
                     const newEnd = new Date(d);
-                    newEnd.setHours(d.getHours() + 1, d.getMinutes(), 0, 0);
+                    newEnd.setHours(d.getHours() + 1, 0, 0, 0);
                     setEndDateTime(newEnd);
                   }
                 }}
@@ -146,22 +171,38 @@ function PaginaPrenotazioni() {
             <div className="flex gap-2 items-center">
               <DatePicker
                 selected={endDateTime}
-                onChange={setEndDateTime}
+                onChange={(date) => {
+                  setEndDateTime(date);
+                  setOpenEnd(false);
+                }}
+                open={openEnd}
+                onInputClick={() => {
+                  setOpenEnd(true);
+                  setOpenStart(false);
+                }}
+                onClickOutside={() => setOpenEnd(false)}
                 dateFormat="dd/MM/yyyy"
                 locale="it"
                 minDate={startDateTime}
                 customInput={<CustomInput />}
               />
+
               <select
                 className="border p-2 rounded"
                 value={formatHour(endDateTime)}
+                onClick={() => {
+                  setOpenStart(false);
+                  setOpenEnd(false);
+                }}
                 onChange={(e) => {
                   const [hours] = e.target.value.split(":").map(Number);
                   const d = new Date(endDateTime);
                   d.setHours(hours, 0, 0, 0);
+
                   if (d < startDateTime) {
                     d.setHours(startDateTime.getHours() + 1, 0, 0, 0);
                   }
+
                   setEndDateTime(d);
                 }}
               >
@@ -180,6 +221,7 @@ function PaginaPrenotazioni() {
             >
               Annulla
             </button>
+
             <button
               type="submit"
               className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
