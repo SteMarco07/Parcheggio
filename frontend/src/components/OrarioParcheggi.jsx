@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { registerLocale } from 'react-datepicker';
 import it from 'date-fns/locale/it';
@@ -8,7 +8,7 @@ import { useStore } from '../store.jsx';
 registerLocale('it', it);
 
 function OrarioParcheggi() {
-    const { setRicerca } = useStore();
+    const { setRicerca, setDataOraInizio, setDataOraFine } = useStore();
 
     const now = new Date();
     now.setMinutes(0, 0, 0);
@@ -27,6 +27,17 @@ function OrarioParcheggi() {
         `${i.toString().padStart(2, '0')}:00`
     );
 
+    // Inizializza i valori nello store al mount
+    useEffect(() => {
+        try {
+            setDataOraInizio(startInitial.toISOString(), formatHour(startInitial));
+            setDataOraFine(endInitial.toISOString(), formatHour(endInitial));
+        } catch (e) {
+            // ignore
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
     // 🔹 CAMBIO DATA INGRESSO
     const handleStartChange = (newDate) => {
         const newStart = new Date(newDate);
@@ -38,6 +49,10 @@ function OrarioParcheggi() {
         const newEnd = new Date(newStart);
         newEnd.setHours(newEnd.getHours() + 1);
         setEndDateTime(newEnd);
+
+        // salva nello store come stringa ISO + ora formattata
+        setDataOraInizio(newStart.toISOString(), formatHour(newStart));
+        setDataOraFine(newEnd.toISOString(), formatHour(newEnd));
     };
 
     // 🔹 CAMBIO ORA INGRESSO
@@ -52,6 +67,10 @@ function OrarioParcheggi() {
         const newEnd = new Date(newStart);
         newEnd.setHours(newEnd.getHours() + 1);
         setEndDateTime(newEnd);
+
+        // salva nello store
+        setDataOraInizio(newStart.toISOString(), formatHour(newStart));
+        setDataOraFine(newEnd.toISOString(), formatHour(newEnd));
     };
 
     // 🔹 CAMBIO DATA USCITA (FIX BUG)
@@ -66,8 +85,14 @@ function OrarioParcheggi() {
             const corrected = new Date(startDateTime);
             corrected.setHours(corrected.getHours() + 1);
             setEndDateTime(corrected);
+
+            // salva nello store
+            setDataOraFine(corrected.toISOString(), formatHour(corrected));
         } else {
             setEndDateTime(newDate);
+
+            // salva nello store
+            setDataOraFine(newDate.toISOString(), formatHour(newDate));
         }
     };
 
@@ -82,8 +107,14 @@ function OrarioParcheggi() {
             const corrected = new Date(startDateTime);
             corrected.setHours(corrected.getHours() + 1);
             setEndDateTime(corrected);
+
+            // salva nello store
+            setDataOraFine(corrected.toISOString(), formatHour(corrected));
         } else {
             setEndDateTime(newEnd);
+
+            // salva nello store
+            setDataOraFine(newEnd.toISOString(), formatHour(newEnd));
         }
     };
 

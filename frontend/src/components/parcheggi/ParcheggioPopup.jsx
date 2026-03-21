@@ -3,7 +3,7 @@ import { useStore } from '../../store.jsx';
 
 function ParcheggioPopup({ parcheggio }) {
 
-    const { addPrenotazione } = useStore()
+    const { addPrenotazione, getTimeStampInizio, getTimeStampFine } = useStore()
     const navigate = useNavigate();
 
     return (
@@ -17,10 +17,10 @@ function ParcheggioPopup({ parcheggio }) {
                         parkingId: parcheggio.id,
                         nome: parcheggio.nome,
                         userId: 0,
-                        startTime: '2024-06-01T10:00:00Z',
-                        endTime: '2024-06-01T12:00:00Z'
+                        startTime: getTimeStampInizio(),
+                        endTime: getTimeStampFine()
                     }
-                    console.log(`Aggiungo ${JSON.stringify(prenotazione)} da popup`)
+                    //console.log(`Aggiungo ${JSON.stringify(prenotazione)} da popup`)
                     addPrenotazione({ prenotazione })
                     navigate('/prenotazioni')
                 }
