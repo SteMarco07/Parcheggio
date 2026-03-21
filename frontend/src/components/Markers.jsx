@@ -3,7 +3,7 @@ import { useMap, Marker } from 'react-map-gl'
 
 import Supercluster from 'supercluster'
 
-const supercluster = new Supercluster({ radius: 60, maxZoom: 16 })
+const supercluster = new Supercluster({ radius: 60, maxZoom: 15 })
 
 function ClusteredMarkers({ parcheggi, onMarkerClick }) {
   const { current: map } = useMap()
@@ -69,22 +69,36 @@ function ClusteredMarkers({ parcheggi, onMarkerClick }) {
   })
 }
 
+// Calcola il colore in base ai posti liberi
+function getMarkerColor(parcheggio) {
+  const { posti_totali, posti_liberi } = parcheggio
+
+  if (!posti_totali || posti_liberi == null) return '#EF4444' // dati assenti
+
+  const ratio = posti_liberi / posti_totali
+
+  if (ratio > 0.5)  return '#22C55E' // verde 
+  if (ratio > 0.2)  return '#F59E0B' // giallo
+  if (ratio > 0) return '#FF7236'    // arancio
+  return '#EF4444'                   // rosso  
+}
 // Marker singolo 
 
-
 function SingleMarker({ parcheggio, onClick }) {
+  const color = getMarkerColor(parcheggio)
+
   return (
     <Marker longitude={parcheggio.lng} latitude={parcheggio.lat} onClick={onClick}>
-      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', transition: 'transform .15s' }}
+      <div
+        style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', cursor: 'pointer', transition: 'transform .15s' }}
         onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
         onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
       >
-        {/* testa della goccia */}
         <div style={{
           width: 32, height: 32,
           borderRadius: '50% 50% 50% 0',
           transform: 'rotate(-45deg)',
-          background: '#1D9E75',
+          background: color,           
           boxShadow: '0 2px 8px rgba(0,0,0,.18)',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
@@ -94,7 +108,6 @@ function SingleMarker({ parcheggio, onClick }) {
             transform: 'rotate(45deg)',
           }} />
         </div>
-        {/* codina e ombra */}
         <div style={{ width: 2, height: 10, background: 'rgba(0,0,0,.12)', borderRadius: '0 0 2px 2px' }} />
         <div style={{ width: 8, height: 3, background: 'rgba(0,0,0,.10)', borderRadius: '50%', marginTop: 1 }} />
       </div>
@@ -107,8 +120,8 @@ function ClusterMarker({ lng, lat, count, onClick }) {
   const tier = count < 5 ? 0 : count < 20 ? 1 : 2
   const cores = [32, 36, 44]
   const rings = [44, 52, 62]
-  const colors = ['#1D9E75', '#0F6E56', '#085041']
-  const alphas = ['rgba(29,158,117,.18)', 'rgba(15,110,86,.18)', 'rgba(8,80,65,.18)']
+  const colors = ['#1D8F9E', '#0F5B6E', '#084250']
+  const alphas = ['rgba(29, 143, 158, 0.18)', 'rgba(15, 91, 110, 0.18)', 'rgba(8, 66, 80, 0.18)']
   const label = count > 99 ? '99+' : String(count)
 
   return (
