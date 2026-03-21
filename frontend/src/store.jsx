@@ -166,6 +166,22 @@ export const useStore = create((set, get) => ({
         } catch (err) {
             set({ error: err.message, isLoading: false });
         }
+    },
+
+    modificaParcheggio: async (id, payload) => {
+        set({ isLoading: true, error: null });
+        try {
+            const data = await api.modificaParcheggio(id, payload);
+            if (data && data.successo) {
+                const parcheggi = get().parcheggi.map((p) => p.id === id ? { ...p, ...payload } : p);
+                set({ parcheggi, parcheggiFiltrati: parcheggi, isLoading: false });
+                console.log("Modificato parcheggio con id:", id);
+            } else {
+                set({ isLoading: false });
+            }
+        } catch (err) {
+            set({ error: err.message, isLoading: false });
+        }
     }
 
 }));

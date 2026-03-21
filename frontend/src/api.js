@@ -77,6 +77,13 @@ export const api = {
             id: id,
             successo: true
         }
+    },
+
+    modificaParcheggio: (id, payload) => {
+        return {
+            id: id,
+            successo: true
+        }
     }
 
 }
